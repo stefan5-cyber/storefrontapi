@@ -14,6 +14,10 @@ services:
     image: postgres:13-bullseye
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_DB=storefrontapi
+      - POSTGRES_USER=django_app
+      - POSTGRES_PASSWORD=django_app
     volumes:
       - pgdata:/var/lib/postgresql/data
 
