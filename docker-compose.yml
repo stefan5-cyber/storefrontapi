@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/backend
+    env_file:
+      - ./backend/.env.dev
+    command: ./docker-entrypoint.sh
+  db:
+    image: postgres:13-bullseye
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
