@@ -34,11 +34,16 @@ class CollectionAdmin(admin.ModelAdmin):
         )
 
 
+class ReviewInline(admin.TabularInline):
+    model = models.Review
+    extra = 0
+
+
 class ProductInventoryFilter(admin.SimpleListFilter):
     title = 'inventory'
     parameter_name = 'inventory'
 
-    def lookup(self, request, model_admin):
+    def lookups(self, request, model_admin):
         return [
             ('<=5', 'Low'),
             ('>5', 'OK')
@@ -54,6 +59,7 @@ class ProductInventoryFilter(admin.SimpleListFilter):
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     actions = ['clear_inventory']
+    inlines = [ReviewInline]
     list_display = ['title', 'unit_price',
                     'collection_title', 'inventory_status']
     list_editable = ['unit_price']
