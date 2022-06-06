@@ -16,7 +16,7 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
 
-    reviews = serializers.PrimaryKeyRelatedField(read_only=True, Many=True)
+    reviews = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     price_with_tax = serializers.SerializerMethodField(
         method_name='calculate_tax')
 
