@@ -3,8 +3,8 @@ from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework import viewsets, mixins
-from .models import Collection, Product, OrderItem, Review
-from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer
+from .models import Collection, Product, OrderItem, Review, Cart, CartItem
+from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CartSerializer, CartItemSerializer, CreateCartItemSerializer, UpdateCartItemSerializer
 from .permissions import IsAdminOrReadOnly
 from .filters import ProductFilter
 
@@ -45,3 +45,27 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         return {'product_id': self.kwargs['product_pk']}
+
+
+class CartViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+
+    queryset = Cart.objects.prefetch_related('items__product').all()
+    serializer_class = CartSerializer
+
+
+class CartItemViewSet(viewsets.ModelViewSet):
+
+    http_method_names = ['get', 'post', 'patch', 'delete']
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']).select_related('product')
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateCartItemSerializer
+        if self.request.method == 'PATCH':
+            return UpdateCartItemSerializer
+        return CartItemSerializer
+
+    def get_serializer_context(self):
+        return {'cart_id': self.kwargs['cart_pk']}

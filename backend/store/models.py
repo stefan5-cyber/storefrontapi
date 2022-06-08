@@ -20,7 +20,8 @@ class Collection(models.Model):
     # Product as string (Product are defined after Collection class)
     # related_name = '+' we don't need revers relational field
     featured_product = models.ForeignKey(
-        'Product', on_delete=models.CASCADE, related_name='+')
+        'Product', null=True, on_delete=models.CASCADE, related_name='+'
+    )
 
     def __str__(self):
         return self.title
@@ -34,13 +35,16 @@ class Product(models.Model):
     slug = models.SlugField()
     description = models.TextField(null=True, blank=True)
     unit_price = models.DecimalField(
-        max_digits=8, decimal_places=2, validators=[MinValueValidator(1)])
+        max_digits=8, decimal_places=2, validators=[MinValueValidator(1)]
+    )
     inventory = models.IntegerField(validators=[MinValueValidator(0)])
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(
-        Collection, on_delete=models.PROTECT, related_name='products')
+        Collection, on_delete=models.PROTECT, related_name='products'
+    )
     promotions = models.ManyToManyField(
-        Promotion, blank=True, related_name='products')
+        Promotion, blank=True, related_name='products'
+    )
 
     def __str__(self):
         return self.title
@@ -51,7 +55,8 @@ class Product(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name='reviews')
+        Product, on_delete=models.CASCADE, related_name='reviews'
+    )
     name = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateField(auto_now_add=True)
@@ -68,11 +73,13 @@ class Customer(models.Model):
         (MEMBERSHIP_GOLD, 'Gold')
     ]
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer'
+    )
     birth_date = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=255)
     membership = models.CharField(
-        max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
+        max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE
+    )
 
     def first_name(self):
         return self.user.first_name
@@ -96,10 +103,12 @@ class Order(models.Model):
     ]
 
     payment_status = models.CharField(
-        max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
+        max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING
+    )
     placed_at = models.DateTimeField(auto_now_add=True)
     customer = models.ForeignKey(
-        Customer, on_delete=models.PROTECT, related_name='orders')
+        Customer, on_delete=models.PROTECT, related_name='orders'
+    )
 
     def customer_first_name(self):
         return self.customer.first_name
@@ -118,9 +127,11 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     product = models.ForeignKey(
-        Product, on_delete=models.PROTECT, related_name='orderitems')
+        Product, on_delete=models.PROTECT, related_name='orderitems'
+    )
     order = models.ForeignKey(
-        Order, on_delete=models.PROTECT, related_name='items')
+        Order, on_delete=models.PROTECT, related_name='items'
+    )
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
     unit_price = models.DecimalField(max_digits=8, decimal_places=2)
 
@@ -132,9 +143,11 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(
-        Cart, on_delete=models.CASCADE, related_name='items')
+        Cart, on_delete=models.CASCADE, related_name='items'
+    )
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name='cartitems')
+        Product, on_delete=models.CASCADE, related_name='cartitems'
+    )
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
 
     class Meta:
