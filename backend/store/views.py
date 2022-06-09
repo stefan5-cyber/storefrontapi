@@ -23,7 +23,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.prefetch_related('reviews').all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, SearchFilter]

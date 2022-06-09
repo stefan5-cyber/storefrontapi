@@ -1,6 +1,5 @@
 from decimal import Decimal
 from django.contrib.auth import get_user_model
-from django.shortcuts import redirect
 from rest_framework import serializers
 from .models import Collection, Product, Review, CartItem, Cart, Customer, OrderItem, Order
 
