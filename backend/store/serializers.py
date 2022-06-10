@@ -1,4 +1,5 @@
 from decimal import Decimal
+from django.db import transaction
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Collection, Product, Review, CartItem, Cart, Customer, OrderItem, Order
@@ -136,18 +137,64 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
 
-    products = SimpleProductSerializer()
+    product = SimpleProductSerializer()
 
     class Meta:
         model = OrderItem
-        fields = ['id', 'quantity', 'unit_price']
+        fields = ['id', 'product', 'quantity', 'unit_price']
 
 
 class OrderSerializer(serializers.ModelSerializer):
 
-    item = OrderItemSerializer(many=True)
+    items = OrderItemSerializer(many=True)
     customer = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'payment_status', 'customer', 'placed_at']
+        fields = ['id', 'payment_status', 'customer', 'items', 'placed_at']
+
+
+class CreateOrderSerializer(serializers.Serializer):
+
+    cart_id = serializers.UUIDField()
+
+    def validate_cart_id(self, value):
+        if not Cart.objects.filter(pk=value).exists():
+            return serializers.ValidationError('Cart with given ID does not exist')
+        if CartItem.objects.filter(cart_id=value).count() <= 0:
+            return serializers.ValidationError('The cart is empty')
+        return value
+
+    def save(self, **kwargs):
+
+        with transaction.atomic():
+            cart_id = self.validated_data['cart_id']
+            user_id = self.context['user_id']
+            customer = Customer.objects.get(user_id=user_id)
+            order = Order.objects.create(customer=customer)
+
+            cart_items = CartItem.objects \
+                .select_related('product') \
+                .filter(cart_id=cart_id)
+
+            order_items = [
+                OrderItem(
+                    order=order,
+                    product=item.product,
+                    quantity=item.quantity,
+                    unit_price=item.product.unit_price
+                ) for item in cart_items
+            ]
+
+            OrderItem.objects.bulk_create(order_items)
+
+            Cart.objects.filter(pk=cart_id).delete()
+
+            return order
+
+
+class UpdateOrderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = ['payment_status']

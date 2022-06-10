@@ -130,7 +130,7 @@ class OrderItem(models.Model):
         Product, on_delete=models.PROTECT, related_name='orderitems'
     )
     order = models.ForeignKey(
-        Order, on_delete=models.PROTECT, related_name='items'
+        Order, on_delete=models.CASCADE, related_name='items'
     )
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
     unit_price = models.DecimalField(max_digits=8, decimal_places=2)
