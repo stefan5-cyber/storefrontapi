@@ -87,6 +87,12 @@ class Customer(models.Model):
     def last_name(self):
         return self.user.last_name
 
+    def username(self):
+        return self.user.username
+
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name if self.user.first_name != '' else self.user.username
+
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
 
@@ -111,10 +117,10 @@ class Order(models.Model):
     )
 
     def customer_first_name(self):
-        return self.customer.first_name
+        return self.customer.first_name()
 
     def customer_last_name(self):
-        return self.customer.last_name
+        return self.customer.last_name()
 
     def __str__(self):
         for p_status in self.PAYMENT_STATUS_CHOICES:
@@ -122,7 +128,7 @@ class Order(models.Model):
                 return p_status[1]
 
     class Meta:
-        ordering = ['payment_status']
+        ordering = ['placed_at', 'payment_status']
 
 
 class OrderItem(models.Model):

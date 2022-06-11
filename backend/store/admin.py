@@ -60,8 +60,10 @@ class ProductInventoryFilter(admin.SimpleListFilter):
 class ProductAdmin(admin.ModelAdmin):
     actions = ['clear_inventory']
     inlines = [ReviewInline]
-    list_display = ['title', 'unit_price',
-                    'collection_title', 'inventory_status']
+    list_display = [
+        'title', 'unit_price',
+        'collection_title', 'inventory_status'
+    ]
     list_editable = ['unit_price']
     list_filter = ['collection', 'last_update', ProductInventoryFilter]
     list_select_related = ['collection']
@@ -73,12 +75,12 @@ class ProductAdmin(admin.ModelAdmin):
     }
 
     @admin.display(ordering='collection')
-    def collection_title(self):
-        return self.collection.title
+    def collection_title(self, product):
+        return product.collection.title
 
     @admin.display(ordering='inventory')
-    def inventory_status(self):
-        return 'OK' if self.inventory >= 5 else 'Low'
+    def inventory_status(self, product):
+        return 'OK' if product.inventory >= 5 else 'Low'
 
     @admin.action(description='Clear inventory')
     def clear_inventory(self, request, queryset):
@@ -90,27 +92,31 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'membership']
+    list_display = ['username', 'first_name', 'last_name', 'membership']
     list_editable = ['membership']
     list_per_page: 15
     list_select_related = ['user']
     ordering = ['user__first_name', 'user__last_name']
-    search_fields = ['user__first_name_istartswith',
-                     'user__last_name_istartswith']
+    search_fields = [
+        'user__first_name_istartswith',
+        'user__last_name_istartswith'
+    ]
 
 
 class OrderItemInline(admin.TabularInline):
     model = models.OrderItem
+    extra = 0
 
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
-        'customer_first_name',
-        'customer_last_name',
+        'placed_at',
         'payment_status'
     ]
     inlines = [OrderItemInline]
+    ordering = ['placed_at']
+    list_prefetch_related = ['customer__user', 'items']
 
-    def payment_status(self):
-        return self.__str__
+    def payment_status(self, order):
+        return order.__str__
