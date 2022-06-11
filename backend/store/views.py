@@ -4,8 +4,9 @@ from rest_framework.filters import SearchFilter
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.decorators import action
 from .models import Collection, Product, OrderItem, Review, Customer, Cart, CartItem, Order
-from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CartSerializer, CartItemSerializer, CreateCartItemSerializer, UpdateCartItemSerializer, OrderSerializer, CreateOrderSerializer, UpdateOrderSerializer
+from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, CartSerializer, CartItemSerializer, CreateCartItemSerializer, UpdateCartItemSerializer, OrderSerializer, CreateOrderSerializer, UpdateOrderSerializer
 from .permissions import IsAdminOrReadOnly
 from .filters import ProductFilter
 
@@ -46,6 +47,26 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         return {'product_id': self.kwargs['product_pk']}
+
+
+class CustomerViewSet(viewsets.ModelViewSet):
+
+    queryset = Customer.objects.select_related('user').all()
+    serializer_class = CustomerSerializer
+    permission_classes = [IsAdminUser]
+
+    @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+    def me(self, request):
+
+        customer = Customer.objects.get(user=request.user.id)
+        if request.method == 'GET':
+            serializer = CustomerSerializer(customer)
+            return Response(serializer.data)
+        elif request.method == 'PUT':
+            serializer = CustomerSerializer(customer, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
 
 
 class CartViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
