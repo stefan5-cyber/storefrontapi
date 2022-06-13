@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from .models import Collection, Product, OrderItem, Review, Customer, Cart, CartItem, Order
 from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, CartSerializer, CartItemSerializer, CreateCartItemSerializer, UpdateCartItemSerializer, OrderSerializer, CreateOrderSerializer, UpdateOrderSerializer
 from .permissions import IsAdminOrReadOnly
+from .pagination import DefaultPagination
 from .filters import ProductFilter
 
 
@@ -28,6 +29,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.prefetch_related('reviews').all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
+    pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = ProductFilter
     search_fields = ['title', 'description']
