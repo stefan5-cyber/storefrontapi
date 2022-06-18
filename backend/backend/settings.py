@@ -28,7 +28,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'foo')
 DEBUG = int(os.environ.get('DEBUG', default=1))
 
 ALLOWED_HOSTS = os.environ.get(
-    'DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 [::1]').split(' ')
+    'DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 [::1]'
+).split(' ')
 
 
 # Application definition
@@ -163,3 +164,12 @@ DJOSER = {
         'current_user': 'core.serializers.UserSerializer'
     }
 }
+
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend'
+)
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', 2525)
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'stefan5@lwa.com')
