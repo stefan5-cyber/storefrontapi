@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'page/style.css' %}">
+</head>
+<body>
+
+    <body>
+    
+        <header class="site-header sticky-top py-1">
+          <nav class="container d-flex flex-column flex-md-row navbar-nav">
+            <a class="px-4 py-2" href="#" aria-label="Product">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mx-auto" role="img" viewBox="0 0 24 24"><title>Product</title><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/></svg>
+            </a>
+            <a class="py-2 d-none d-md-inline-block p-3" href="/store">STORE</a>
+            <a class="py-2 d-none d-md-inline-block p-3" href="http://localhost:3000" target="_blank">SMTP4DEV</a>
+          </nav>
+        </header>
+        
+        <main>
+
+          <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 bg-light">
+            <div class="col-md-7 p-lg-5 mx-auto my-0">
+              <h1 class="display-4 fw-normal">Initial web store</h1>
+              <br>
+              <h3>Sample RESTful API using:</h3>
+              <ul>
+                  <li>Python 3.8</li>
+                  <li>Django framework 4.0
+
+                    <ul>
+                        <li>djangorestframework</li>
+                        <li>djangorestframework-simplejwt</li>
+                        <li>drf-nested-routers</li>
+                        <li>djoser</li>
+                        <li>celery</li>
+                    </ul>
+                  </li>
+
+                  <li>Postgres</li>
+                  <li>Authentication with simple JWT</li>
+                  <li>Redis</li>
+                  <li>Docker</li>  
+              </ul>
+              
+              <br>
+              <h3>Requirements</h3>
+              <p class=" fw-normal">Docker</p>
+              <br>
+
+              <h3>Commands</h3>
+              <p class=" fw-normal">Docker compose up -d --build </p>
+              <br>
+
+              <h3 class="pb-2">Endpoints</h3>
+
+              <h5>Authentication:</h5>
+              <ul>
+                  <li>/auth/users/</li>
+                  <li>/auth/users/me/</li>
+                  <li>/auth/users/confirm/</li>
+                  <li>/auth/users/resend_activation/</li>
+                  <li>/auth/users/set_password/</li>
+                  <li>/auth/users/reset_password/</li>
+                  <li>/auth/users/reset_password_confirm/</li>
+                  <li>/auth/users/set_username/</li>
+                  <li>/auth/users/reset_username/</li>
+                  <li>/auth/users/reset_username_confirm/</li>
+                  <li>/auth/jwt/create/
+                    <ul>
+                        <li>POST - Use this endpoint to obtain JSON Web Token</li>
+                    </ul>
+                  </li>
+                  <li>/auth/jwt/refresh/</li>
+                  <li>/auth/jwt/verify/</li>
+              </ul>
+
+              <h5>Product:</h5>
+              <ul>
+                <li>/store/products/
+                    <ul>
+                        <li>GET - Product List</li>
+                        <li>POST - Create new Product (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+                <li>/store/products/:id
+                    <ul>
+                        <li>GET - Product detail</li>
+                        <li>PUT - Update Product (authenticated staff members JWT)</li>
+                        <li>DELETE - Delete Product (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+                <li>/store/products/:id/reviews
+                    <ul>
+                        <li>GET - Reviews list</li>
+                        <li>POST - Add review for given Product</li>
+                    </ul>
+                </li>
+                <li>/store/products/:id/reviews/:reviewid
+                    <ul>
+                        <li>GET - Review detail</li>
+                        <li>PUT- Update Review</li>
+                        <li>DELETE - Delete Review</li>
+                    </ul>
+                </li>
+              </ul>
+
+              <h5>Collection:</h5>
+              <ul>
+                <li>/store/collections/
+                    <ul>
+                        <li>GET - Collection List</li>
+                        <li>POST - Create new Collection (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+                <li>/store/collections/:id
+                    <ul>
+                        <li>GET - Collection detail</li>
+                        <li>PUT - Update Collection (authenticated staff members JWT)</li>
+                        <li>DELETE - Delete Collection (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+              </ul>
+
+              <h5>Customer:</h5>
+              <ul>
+                <li>/store/customers/
+                    <ul>
+                        <li>GET - Customers List (authenticated staff members JWT)</li>
+                        <li>POST - Create new Customer (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+                <li>/store/customers/me
+                    <ul>
+                        <li>GET - Customer profile (authenticated JWT)</li>
+                        <li>PUT - Update Customer profile (authenticated JWT)</li>
+                    </ul>
+                </li>
+                <li>/store/customers/:id
+                    <ul>
+                        <li>GET - Customer detail</li>
+                        <li>PUT - Update Customer (authenticated staff members JWT)</li>
+                        <li>DELETE - Delete Customer (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+              </ul>
+
+              <h5>Cart:</h5>
+              <ul>
+                <li>/store/cart/
+                    <ul>
+                        <li>POST - Create new Cart (get cart id)</li>
+                    </ul>
+                </li>
+                <li>/store/cart/:id/items
+                    <ul>
+                        <li>GET - Items list for the given cart</li>
+                        <li>POST - Add Item in the cart</li>
+                    </ul>
+                </li>
+                <li>/store/cart/:id/items/:itemid
+                    <ul>
+                        <li>GET - Item detail</li>
+                        <li>PATCH - Update Item quantity</li>
+                        <li>DELETE - Remove Item from cart</li>
+                    </ul>
+                </li>
+              </ul>
+
+              <h5>Orders:</h5>
+              <ul>
+                <li>/store/orders/
+                    <ul>
+                        <li>POST - Create new Order (authenticated JWT)</li>
+                    </ul>
+                </li>
+                <li>/store/orders/:id/
+                    <ul>
+                        <li>GET - Order detail</li>
+                        <li>PUT - Update Order payment status (authenticated staff members JWT)</li>
+                        <li>DELETE - Delete Order (authenticated staff members JWT)</li>
+                    </ul>
+                </li>
+              </ul>
+              <br>
+
+              <h3 class="pb-3">Example</h3>
+
+              <h5>Default SuperUser:</h5>
+              <p class="mb-1">username: admin</p>
+              <p class="mb-1">password: password</p>
+              <br>
+
+              <h5>Step 1:</h5>
+              <p class="mb-1">Create JWT token for superuser</p>
+              <p class="mb-1">POST - /auth/jwt/create/</p>
+              <br>
+
+              <h5>Step 2:</h5>
+              <p class="mb-1">Create Cart (get ID)</p>
+              <p class="mb-1">POST - /store/cart/</p>
+              <br>
+
+              <h5>Step 3:</h5>
+              <p class="mb-1">Add Items to cart</p>
+              <p class="mb-1">POST - /store/cart/:id/items</p>
+              <br>
+
+              <h5>Step 4:</h5>
+              <p class="mb-1">Create Order with cart ID</p>
+              <p class="mb-1">POST - /store/orders/ - required header (Authorization: JWT < access-token >) </p>
+              <p>After creating the order, the background process (celery pkg) sends mail to customer with order details</p>
+
+              <br>
+              <br>
+              <p><strong>NOTE: </strong> After the User is created, the signal handler (post_save) creates a Customer for the given User with default parameters</p>
+
+            </div>
+          </div>
+        
+        </main>
+        
+        
+        
+            <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        
+              
+          </body>
+    
+</body>
+</html>

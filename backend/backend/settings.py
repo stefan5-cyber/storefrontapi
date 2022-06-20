@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'djoser',
     'debug_toolbar',
     'store',
+    'page',
     'core'
 
 ]
@@ -171,5 +172,5 @@ EMAIL_BACKEND = os.environ.get(
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', 2525)
+EMAIL_PORT = os.environ.get('EMAIL_PORT', 25)
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'stefan5@lwa.com')
