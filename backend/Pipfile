@@ -12,6 +12,8 @@ django-filter = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 psycopg2-binary = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 autopep8 = "*"

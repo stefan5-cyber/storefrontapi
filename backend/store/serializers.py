@@ -3,6 +3,7 @@ from django.db import transaction
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Collection, Product, Review, CartItem, Cart, Customer, OrderItem, Order
+from .tasks import notify_customer
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -189,6 +190,12 @@ class CreateOrderSerializer(serializers.Serializer):
             OrderItem.objects.bulk_create(order_items)
 
             Cart.objects.filter(pk=cart_id).delete()
+
+            serializer = OrderSerializer(order)
+
+            transaction.on_commit(
+                lambda: notify_customer.delay(serializer.data)
+            )
 
             return order
 
