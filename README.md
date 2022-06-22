@@ -110,7 +110,7 @@ Docker compose up -d --build
   - `PUT` - Update Order payment status (authenticated staff members JWT)
   - `DELETE` - Delete Order (authenticated staff members JWT)
 
-## Example:
+## Example
 
 #### Open smtp4dev panel via the navigation menu
 
