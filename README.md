@@ -115,8 +115,8 @@ Docker compose up -d --build
 #### Open smtp4dev panel via the navigation menu
 
 #### Default SuperUser:
-username: `admin`
-assword: `password`
+username: `admin`  
+password: `password`
 
 #### Step 1:
 Create JWT token for superuser
